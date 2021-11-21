@@ -5,7 +5,7 @@ class Square(Enum):
     O = 1
     EMPTY = 2
     
-class GameResult(Enum):
+class GameState(Enum):
     XWIN = 0
     OWIN = 1
     DRAW = 2
@@ -15,9 +15,25 @@ class Board:
     def __init__(self):
         self.board = [[Square.EMPTY for i in range(3)] for j in range(3)]
     
+    def set_board(self, board):
+        self.board = board
+    def get_board(self):
+        return self.board
+    
     def set_square(self, posX, posY, symbol):
         self.board[posX][posY] = symbol
-    
+    def state(self):
+        for k in range(1):
+            for i in range(3):
+                if (all(self.board[i][j] == Square(k) for j in range (3)) or all(self.board[j][i] == Square(k) for j in range (3))):
+                    return k
+            if (all(self.board[i][i] == Square(k) for i in range(3)) or all(self.board[i][2-i] == Square(k) for i in range(3))):
+                return k
+            if (self.get_empty_squares() == []):
+                return 2
+            return 3
+        return 3
+
     def get_square(self, posX, posY):
         return self.board[posX][posY] 
     def get_empty_squares(self):
@@ -28,24 +44,13 @@ class Board:
             line = list(map(lambda sq: dict_squares[sq], self.board[row]))
             print(''.join(line))   
         print("")
-
-class Player:
-    def __init__(self, name):
-        self.name = name
-        
-    def move(self, board):
-        empty_squares = board.get_empty_squares()
-        r = randint(0, len(empty_squares) - 1)
-        return empty_squares[r][0], empty_squares[r][1]
-        
-        
-
+               
 class Game:   
     def __init__(self, player1, player2):
        self.board = Board()
        self.turn = 0
        self.players = [player1, player2]
-       self.result = GameResult.ONGOING
+       self.state = GameState.ONGOING
     
     def won(self):
         player = (self.turn + 1)%2
@@ -64,26 +69,18 @@ class Game:
    
     def play(self):
         flag = self.won()
+        self.board.print_board()
         while (flag == 3):
             player_move = self.players[self.turn].move(self.board)
+            self.board.print_board()
             self.move(player_move[0], player_move[1])
             self.turn = (self.turn + 1) % 2
             self.board.print_board()
             flag = self.won()
-        self.result = GameResult(flag)
+        self.state = GameState(flag)
         return 0 
-    def print_result(self): 
-        result_dict = {GameResult.XWIN : 'X won', GameResult.OWIN : 'O won', GameResult.DRAW : 'DRAW', GameResult.ONGOING : 'ONGOING'}
-        print (result_dict[self.result])
-                    
-
-def main():
-    player1 = Player('Ujkan')
-    player2 = Player('Magnus') 
-    game = Game(player1, player2)
-    game.play()
-    game.print_result()
-   
-
-if __name__ == "__main__":
-    main()
+    
+    def print_state(self): 
+        state_dict = {GameState.XWIN : 'X won', GameState.OWIN : 'O won', GameState.DRAW : 'DRAW', GameState.ONGOING : 'ONGOING'}
+        print (state_dict[self.state])
+     
