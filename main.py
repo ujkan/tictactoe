@@ -1,4 +1,4 @@
-import players
+from ttt import players
 
 def main():
     player1 = players.MinimaxPlayer('Ujkan', 4)

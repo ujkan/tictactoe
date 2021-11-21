@@ -69,13 +69,10 @@ class Game:
    
     def play(self):
         flag = self.won()
-        self.board.print_board()
         while (flag == 3):
             player_move = self.players[self.turn].move(self.board)
-            self.board.print_board()
             self.move(player_move[0], player_move[1])
             self.turn = (self.turn + 1) % 2
-            self.board.print_board()
             flag = self.won()
         self.state = GameState(flag)
         return 0 
