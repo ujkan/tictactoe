@@ -76,15 +76,14 @@ class Board:
                  
             
     def state(self):
-        for k in range(1):
+        for k in range(2):
             for i in range(3):
                 if (all(self.board[i][j] == Square(k) for j in range (3)) or all(self.board[j][i] == Square(k) for j in range (3))):
                     return k
             if (all(self.board[i][i] == Square(k) for i in range(3)) or all(self.board[i][2-i] == Square(k) for i in range(3))):
                 return k
-            if (self.get_empty_squares() == []):
-                return 2
-            return 3
+        if (len(self.get_empty_squares())==0):
+            return 2
         return 3
 
     def get_square(self, posX, posY):
@@ -123,6 +122,9 @@ class Game:
     def play(self):
         flag = self.won()
         while (flag == 3):
+            #print("*******")
+            #self.board.print_board()
+            #print("*******")
             player_move = self.players[self.turn].move(self.board)
             self.move(player_move[0], player_move[1])
             self.turn = (self.turn + 1) % 2

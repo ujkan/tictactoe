@@ -2,7 +2,9 @@ from enum import Enum
 from copy import deepcopy
 from random import randint
 from abc import ABC, abstractmethod
-from game import Board, Square
+from . import game
+
+# from game import Board, game.Square
 class Player(ABC):
     def __init__(self, name):
         self.name = name
@@ -35,7 +37,11 @@ class GameTree:
         self.alpha = alpha
         self.beta = beta
         empty_squares = self.board.get_empty_squares()
-        if (empty_squares == [] or depth == 0):
+        winner = self.board.state()
+        if (winner != 3 or depth == 0):
+            #print("depth: ", depth, " ;; ", "winner: ", winner)
+            #self.board.print_board()
+            #print("#########")
             winner = self.board.state() 
             if (winner == 0):
                 self.eval = 1
@@ -47,41 +53,48 @@ class GameTree:
                 # better eval function
                 self.eval = self.board.board_eval()
             return
-        for i in range(len(empty_squares)): 
-            emptysq = empty_squares[i]
-            symbol = Square.EMPTY
+        self.choice = empty_squares[0]
+        if (self.rootType == NodeType.MAXNODE):
+            self.eval = -999
+            childType = NodeType.MINNODE
+            symbol = game.Square.X
             flag = True
-            if (self.rootType == NodeType.MAXNODE):
-                self.eval = -999
-                childType = NodeType.MINNODE
-                symbol = Square.X
-                flag = True
-            else:
-                self.eval = +999
-                childType = NodeType.MAXNODE
-                symbol = Square.O
-                flag = False
-            child_board = Board()
-            child_board.set_board(deepcopy(self.board.get_board()))
-            child_board.set_square(emptysq[0], emptysq[1], symbol)
-            # child_board.print_board()
-            child_tree = GameTree(childType, child_board)
-            child_tree.crawl(depth-1, self.alpha, self.beta)
-            if (flag):
+            for i in range(len(empty_squares)): 
+                emptysq = empty_squares[i]
+                child_board = game.Board()
+                child_board.set_board(deepcopy(self.board.get_board()))
+                child_board.set_square(emptysq[0], emptysq[1], symbol)
+                # child_board.print_board()
+                child_tree = GameTree(childType, child_board)
+                child_tree.crawl(depth-1, self.alpha, self.beta)
                 if (self.eval < child_tree.eval):
                     self.eval = child_tree.eval
                     self.choice = emptysq
                 if (self.eval >= self.beta):
                     break
+                
                 self.alpha = max(self.alpha, self.eval)
-            else:
+        if (self.rootType == NodeType.MINNODE):
+            self.eval = 999
+            childType = NodeType.MAXNODE
+            symbol = game.Square.O
+            flag = False
+            for i in range(len(empty_squares)): 
+                emptysq = empty_squares[i]
+                child_board = game.Board()
+                child_board.set_board(deepcopy(self.board.get_board()))
+                child_board.set_square(emptysq[0], emptysq[1], symbol)
+                # child_board.print_board()
+                child_tree = GameTree(childType, child_board)
+                child_tree.crawl(depth-1, self.alpha, self.beta)
                 if (self.eval > child_tree.eval):
                     self.eval = child_tree.eval
                     self.choice = emptysq
-                
-                if (self.eval <= self.alpha):
-                    break
-                self.beta = min(self.beta, self.eval)
+                    if (self.eval <= self.alpha):
+                        break
+                    
+                    self.beta = min(self.beta, self.eval)
+
          
 
 
@@ -92,7 +105,7 @@ class MinimaxPlayer(Player):
         
     def move(self, board):
         tree = GameTree(NodeType.MAXNODE, board)
-        tree.crawl(self.depth,-99,99)
+        tree.crawl(self.depth,-9999999,999999999)
         sq = tree.choice
         return sq[0], sq[1]
-         
+        
