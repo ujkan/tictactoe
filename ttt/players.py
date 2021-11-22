@@ -41,8 +41,11 @@ class GameTree:
                 self.eval = 1
             elif (winner == 1):
                 self.eval = -1
-            else:
-                self.eval = 0
+            else: 
+                # bad eval function
+                #    self.eval = 0
+                # better eval function
+                self.eval = self.board.board_eval()
             return
         for i in range(len(empty_squares)): 
             emptysq = empty_squares[i]

@@ -22,6 +22,59 @@ class Board:
     
     def set_square(self, posX, posY, symbol):
         self.board[posX][posY] = symbol
+        
+    def board_eval(self):
+        x2 = 0
+        x1 = 0
+        o2 = 0
+        o1 = 0
+        vals = {Square.EMPTY : 0, Square.X : 1, Square.O : -1}
+        for row in range(3):
+            s = sum(map(lambda sq: vals[sq], self.board[row]))
+            if (s == 2):
+                x2 +=1
+            elif (s == 1):
+                x1 += 1
+            elif (s == -1):
+                o1 += 1
+            elif (s == -2):
+                o2 += 2
+        for col in range(3):
+            s = sum(map(lambda sq: vals[sq], [self.board[i][col] for i in range(3)]))
+            if (s == 2):
+                x2 +=1
+            elif (s == 1):
+                x1 += 1
+            elif (s == -1):
+                o1 += 1
+            elif (s == -2):
+                o2 += 2
+                
+        s = sum(map(lambda sq: vals[sq], [self.board[i][i] for i in range(3)]))
+        if (s == 2):
+            x2 +=1
+        elif (s == 1):
+            x1 += 1
+        elif (s == -1):
+           o1 += 1
+        elif (s == -2):
+            o2 += 2
+        s = sum(map(lambda sq: vals[sq], [self.board[i][2-i] for i in range(3)]))
+        if (s == 2):
+            x2 +=1
+        elif (s == 1):
+            x1 += 1
+        elif (s == -1):
+           o1 += 1
+        elif (s == -2):
+            o2 += 2
+            
+            
+        return 3*x2 + x1 - (3*o2 + o1)
+
+ 
+                 
+            
     def state(self):
         for k in range(1):
             for i in range(3):
