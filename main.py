@@ -2,14 +2,14 @@ from ttt import players
 from ttt import game
 
 def main():
-    p1 = players.MinimaxPlayer('Ujkan', 4)
-    p2 = players.RandomPlayer('Magnus') 
-    N = 10
-    ran = range(3, 7)
+    N = 1
+    ran = range(1, 7)
     wins = []
     losses = []
     for d in ran:
-        p1 = players.MinimaxPlayer('minimax', d)
+        # p1 = players.RandomPlayer('random')
+        p1 = players.MinimaxPlayer('minimax1', d, 'X')
+        p2 = players.MinimaxPlayer('minimax2', d, 'O')
         p1_wins = 0
         p1_losses = 0
         for i in range(N):
@@ -21,7 +21,9 @@ def main():
                 p1_losses += 1
         wins.append(p1_wins/N)
         losses.append(p1_losses)
-    print(losses)
+    # if minimax is to play correctly, it should never lose
+    print("Wins: ", wins)
+    print("Number of losses: ", sum(losses))
    
 
 if __name__ == "__main__":
