@@ -1,7 +1,0 @@
-a couple of notes
-    * eval function should be implemented in minimax, not Board
-    * find better board representation (perhaps string of length 9), easier to manipulate
-    * many inefficiencies! the deepcopy probably causes issues
-        -> find a way for tree children nodes to inherit the board more smoothly
-        -> fix gametree
-        
