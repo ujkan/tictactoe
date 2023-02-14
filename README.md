@@ -14,10 +14,10 @@ The decision to do this was perhaps ill-suited, as there are many features of a 
 The app isn't complete. For one, I still need to have a "Game Over" notification. Secondly, the project stucture is a mess and I've yet to develop a neat way to build and run both the frontend and backend.
 
 ## How to run
-To run the backend, simply open `java` folder in a Java environment and run. Alternatively, run
+To run the backend, simply open the `java` folder in a Java environment and run. Alternatively, run
 ```
 mvn spring-boot:run
 ```
 in the command line.
 
-To run the frontend, run `npm start` in the [java/src/main/resources](resources) folder.
+To run the frontend, run `npm start` in the [resources](java/src/main/resources) folder.
