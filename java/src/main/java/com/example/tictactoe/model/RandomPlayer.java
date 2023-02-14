@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.Entity;
 import java.util.Random;
 @Entity
+@Component("Random")
 public class RandomPlayer extends Player {
     @Override
     public int move(Board board) {

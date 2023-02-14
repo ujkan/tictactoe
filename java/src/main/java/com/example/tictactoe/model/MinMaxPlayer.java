@@ -1,10 +1,12 @@
 package com.example.tictactoe.model;
 
 import com.example.tictactoe.service.GameService;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
 
 @Entity
+@Component("MinMax")
 public class MinMaxPlayer extends Player {
 
     private class Node {
@@ -21,11 +23,11 @@ public class MinMaxPlayer extends Player {
         switch (st) {
 
             case XWIN -> {
-                return this.turn ? -3 : 3;
+                return this.turn ? -3 : 4;
             }
             case OWIN -> {
 
-                return this.turn ? 3 : -3;
+                return this.turn ? 4 : -3;
             }
             case DRAW -> {
                 return -1;
@@ -56,7 +58,7 @@ public class MinMaxPlayer extends Player {
                         my.value = child.value;
                         my.choice = square;
                     }
-                    if (my.value == 3)
+                    if (my.value == 4)
                         return my;
                 }
                 return my;

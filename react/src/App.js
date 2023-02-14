@@ -13,7 +13,7 @@ const App = () => {
 
   // Fetch the current game state from the API when the component mounts
   useEffect(() => {
-    fetch('/api/game')
+    fetch('/board')
       .then(response => response.json())
       .then(data => {
         setGrid(data.grid);
@@ -45,7 +45,7 @@ const App = () => {
 
       // If the other player is the AI, make a move on behalf of the AI
       if (nextPlayer === 'O') {
-        fetch('/api/game/ai')
+        fetch('/ai')
           .then(response => response.json())
           .then(aiMove => {
             // Update the grid with the AI's move

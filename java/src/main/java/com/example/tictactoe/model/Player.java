@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
 
-@Entity
 public abstract class Player {
     protected boolean turn;
 

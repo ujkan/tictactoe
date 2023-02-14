@@ -2,6 +2,7 @@ package com.example.tictactoe.service;
 
 import com.example.tictactoe.model.Board;
 import com.example.tictactoe.model.GameState;
+import com.example.tictactoe.model.MinMaxPlayer;
 import com.example.tictactoe.model.Player;
 import org.springframework.stereotype.Service;
 
@@ -9,18 +10,19 @@ import org.springframework.stereotype.Service;
 public class GameService {
     private Board board;
     private boolean turn;
-    private Player playerOne;
-    private Player playerTwo;
+    private MinMaxPlayer ai;
     private GameState state;
     private int lastMove;
 
-    public GameService(Player playerOne, Player playerTwo) {
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public GameService() {
         this.board = new Board();
         this.turn = false;
-        this.playerOne = playerOne;
-        playerOne.setTurn(false);
-        this.playerTwo = playerTwo;
-        playerTwo.setTurn(true);
+        this.ai = new MinMaxPlayer();
+        this.ai.setTurn(true);
         this.state = GameState.ONGOING;
         this.lastMove = -99;
     }
@@ -28,6 +30,7 @@ public class GameService {
     public void move(int position) {
         if (this.board.getSquare(position) == '_') {
             this.board.setSquare(position, Board.getSymbols()[turn ? 1 : 0]);
+            turn = !turn;
         }
         else
             throw new RuntimeException("INVALID MOVE. SQUARE OCCUPIED");
@@ -93,20 +96,25 @@ public class GameService {
         else
             return GameState.ONGOING;
     }
+
+    public int aiMove() {
+        int move = ai.move(this.board);
+        this.board.setSquare(move, Board.getSymbols()[turn ? 1 : 0]);
+        turn = !turn;
+        return move;
+    }
     public void play() {
         int playerMove;
         while (state == GameState.ONGOING) {
             // this.board.printBoard();
             // System.out.println("######\n");
             if (!turn) {
-                playerMove = playerOne.move(this.board);
+                playerMove = ai.move(this.board);
+                this.move(playerMove);
+                this.lastMove = playerMove;
+                state = GameService.stateAfter(this.board, this.turn, playerMove);
+                turn = !turn;
             }
-            else
-                playerMove = playerTwo.move(this.board);
-            this.move(playerMove);
-            this.lastMove = playerMove;
-            state = GameService.stateAfter(this.board, this.turn, playerMove);
-            turn = !turn;
         }
         // this.board.printBoard();
 
