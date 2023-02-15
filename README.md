@@ -11,7 +11,10 @@ Since my Tic-Tac-Toe implementation needed an interface anyway, I thought I'd ju
 The decision to do this was perhaps ill-suited, as there are many features of a REST API that are totally unnecessary for Tic-Tac-Toe, but it was a start nonetheless.
 
 ## Current state
-The app isn't complete. For one, I still need to have a "Game Over" notification. Secondly, the project stucture is a mess and I've yet to develop a neat way to build and run both the frontend and backend.
+The app isn't complete. Here's a list of some improvements to be made: 
+- [ ] a "Game Over" notification. 
+- [ ] fix project structure and develop a way to run both the backend and frontend in conjunction
+- [ ] review the test suite
 
 ## How to run
 To run the backend, simply open the `java` folder in a Java environment and run. Alternatively, run
